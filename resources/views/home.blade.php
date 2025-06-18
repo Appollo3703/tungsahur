@@ -4,12 +4,17 @@
 @section('title', 'Laporan Barang Hilang & Ditemukan Kampus LPKIA')
 
 @section('content')
-    <section class="hero-section-v5">
-        {{-- Elemen dekoratif untuk background (opsional) --}}
+    {{-- HERO SECTION - V5 (Direvisi agar tidak terlalu kotak) --}}
+    <section class="hero-section-v5 position-relative overflow-hidden">
+        {{-- Elemen dekoratif baru untuk bentuk dinamis --}}
+        <div class="hero-shape-top-left"></div>
+        <div class="hero-shape-bottom-right"></div>
+
+        {{-- Elemen dekoratif background halus (dari CSS Anda sebelumnya) --}}
         <div class="hero-v5-bg-decoration-layer1"></div>
         <div class="hero-v5-bg-decoration-layer2"></div>
 
-        <div class="container">
+        <div class="container position-relative" style="z-index: 2;">
             <div class="row align-items-center justify-content-center min-vh-75 py-5 text-center text-lg-start">
                 {{-- Kolom Teks --}}
                 <div class="col-lg-7 col-md-10 hero-v5-content-col">
@@ -18,64 +23,80 @@
                         <span class="highlight-v5">AyoTemukan</span> Siap Membantu!
                     </h1>
                     <p class="hero-v5-subtitle mb-4">
-                        Platform komunitas Kampus LPKIA untuk melaporkan dan menemukan barang hilang. Mudah, cepat, dan
+                        Platform komunitas Kampus untuk melaporkan dan menemukan barang hilang. Mudah, cepat, dan
                         menghubungkan Anda kembali dengan barang berharga Anda.
                     </p>
                     <div class="hero-v5-buttons mt-4 pt-2">
                         <a href="{{ route('barang.create') }}"
-                            class="btn btn-lg btn-hero-v5-primary shadow-lg me-lg-3 mb-3 mb-lg-0">
+                            class="btn btn-lg btn-hero-v5-primary shadow-lg me-lg-3 mb-3 mb-lg-0 rounded-pill px-4">
                             <i class="bi bi-send-plus-fill me-2"></i>Laporkan Barang
                         </a>
-                        <a href="{{ route('barang.index') }}" class="btn btn-lg btn-hero-v5-secondary shadow-sm">
+                        <a href="{{ route('barang.index') }}"
+                            class="btn btn-lg btn-hero-v5-secondary shadow-sm rounded-pill px-4">
                             <i class="bi bi-search me-2"></i>Telusuri Laporan
                         </a>
                     </div>
                 </div>
+                {{-- Kolom Ilustrasi --}}
                 <div class="col-lg-5 d-none d-lg-flex justify-content-center align-items-center hero-v5-illustration-col">
                     <img src="{{ asset('images/hero-section.png') }}" alt="Ilustrasi Platform Lost and Found AyoTemukan"
                         class="hero-v5-illustration img-fluid">
                 </div>
             </div>
         </div>
+        {{-- Indikator scroll bisa dimodifikasi bentuknya atau dihapus jika tidak diinginkan --}}
         <div class="hero-v5-scroll-indicator text-center">
-            <a href="#search-form-v2-section-anchor" aria-label="Scroll ke Form Pencarian">
-                <i class="bi bi-chevron-compact-down"></i>
+            <a href="#search-form-v2-section-anchor" aria-label="Scroll ke Form Pencarian" class="text-white-50">
+                <i class="bi bi-chevron-compact-down fs-1"></i>
             </a>
+        </div>
+
+        {{-- Tambahan: Shape Divider di bagian bawah hero section --}}
+        <div class="hero-bottom-shape-divider">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path
+                    d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
+                    class="shape-fill"></path>
+            </svg>
         </div>
     </section>
     {{-- Akhir HERO SECTION --}}
 
 
-    {{-- FORM PENCARIAN --}}
     <section class="search-form-v2-section" id="search-form-v2-section-anchor">
-        {{-- ... (Konten form pencarian dari respons sebelumnya) ... --}}
         <div class="container">
             <div class="search-form-v2-card shadow rounded-lg p-4 p-lg-5">
                 <form action="{{ route('barang.index') }}" method="GET" class="row g-3 align-items-end">
-                    <div class="col-lg-5 col-md-12">
-                        <label for="search_keywords" class="form-label fw-medium mb-1">Cari Barang Apa?</label>
-                        <input type="text" class="form-control form-control-lg" name="search" id="search_keywords"
+                    <div class="col-lg-4 col-md-12"> {{-- Disesuaikan --}}
+                        <label for="search_keywords_home" class="form-label fw-medium mb-1">Cari Barang Apa?</label>
+                        <input type="text" class="form-control form-control-lg" name="search" id="search_keywords_home"
                             placeholder="Mis: Kunci Motor, Dompet Coklat, KTM..." value="{{ request('search') }}">
                     </div>
                     <div class="col-lg-3 col-md-6">
-                        <label for="search_kategori" class="form-label fw-medium mb-1">Kategori</label>
-                        <select class="form-select form-select-lg" name="kategori" id="search_kategori">
+                        <label for="search_kategori_home" class="form-label fw-medium mb-1">Kategori</label>
+                        <select class="form-select form-select-lg" name="kategori" id="search_kategori_home">
                             <option value="" selected>Semua Kategori</option>
-                            <option value="elektronik">Elektronik</option>
-                            <option value="dokumen">Dokumen & Kartu</option>
-                            <option value="aksesoris">Aksesoris & Perhiasan</option>
-                            <option value="tas_dompet">Tas & Dompet</option>
-                            <option value="buku_alat_tulis">Buku & Alat Tulis</option>
-                            <option value="lainnya">Lainnya</option>
+                            {{-- Loop Kategori dari Controller atau View Composer --}}
+                            @php
+                                // Cara cepat, idealnya $kategorisForForm dikirim dari controller route '/'
+                                $kategorisForForm = \App\Models\Kategori::orderBy('nama_kategori')->get();
+                            @endphp
+                            @foreach ($kategorisForForm as $kategori)
+                                <option value="{{ $kategori->slug }}"
+                                    {{ request('kategori') == $kategori->slug ? 'selected' : '' }}>
+                                    {{ $kategori->nama_kategori }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
-                    <div class="col-lg-2 col-md-6">
-                        <label for="search_status" class="form-label fw-medium mb-1">Status</label>
-                        <select class="form-select form-select-lg" name="status" id="search_status">
+                    <div class="col-lg-3 col-md-6"> {{-- Disesuaikan --}}
+                        <label for="search_status_home" class="form-label fw-medium mb-1">Status</label>
+                        <select class="form-select form-select-lg" name="status" id="search_status_home">
                             <option value="" selected>Semua Status</option>
-                            <option value="hilang" {{ request('status') == 'hilang' ? 'selected' : '' }}>Hilang</option>
-                            <option value="ditemukan" {{ request('status') == 'ditemukan' ? 'selected' : '' }}>Ditemukan
+                            <option value="hilang" {{ request('status') == 'hilang' ? 'selected' : '' }}>Barang Hilang
                             </option>
+                            <option value="ditemukan" {{ request('status') == 'ditemukan' ? 'selected' : '' }}>Barang
+                                Ditemukan</option>
                         </select>
                     </div>
                     <div class="col-lg-2 col-md-12">
@@ -91,7 +112,7 @@
     {{-- Barang Hilang Terbaru (Konten dari file Anda sebelumnya) --}}
     <div class="container mt-5 pt-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="fw-bold section-title">Laporan Barang Hilang</h2>
+            <h2 class="fw-bold section-title">Laporan Barang Terbaru</h2>
             <a href="{{ route('barang.index') }}" class="text-decoration-none fw-medium">Lihat Semua <i
                     class="bi bi-arrow-right-short"></i></a>
         </div>

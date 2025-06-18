@@ -4,8 +4,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Ayo Temukan - @yield('title', config('app.name', 'Laravel'))</title>
+    <title>AyoTemukan - @yield('title', config('app.name', 'Laravel'))</title>
     <link rel="icon" href="{{ asset('images/logo-ayotemukan.png') }}" type="image/png">
+    @stack('styles')
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -32,7 +33,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ Request::routeIs('barang.index*') ? 'active' : '' }}"
-                            href="{{ route('barang.index') }}">Barang Hilang</a>
+                            href="{{ route('barang.index') }}">Semua Laporan Barang</a>
                     </li>
                     @auth
                         <li class="nav-item">
@@ -61,6 +62,14 @@
                             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="{{ route('profile.edit') }}"><i
                                             class="bi bi-person-circle me-2"></i>Profil</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                {{-- ... link profil ... --}}
+                                @if (Auth::user()->is_admin)
+                                    <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}"><i
+                                                class="bi bi-shield-lock-fill me-2"></i>Admin Panel</a></li>
+                                @endif
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>

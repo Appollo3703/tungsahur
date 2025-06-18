@@ -3,18 +3,21 @@
 use App\Models\Barang;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BarangController;
+use App\Http\Controllers\BerandaController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserDashboardController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
+
+
 
 // Halaman utama
-Route::get('/', function () {
-    $barangs = Barang::latest()->take(4)->get(); // Ambil 4 barang terbaru
-    return view('home', compact('barangs'));
-})->name('home');
+Route::get('/', [BerandaController::class, 'index'])->name('home');
 
-// Dashboard (hanya untuk user login dan terverifikasi)
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Dashboard Pengguna
+Route::get('/dashboard', [UserDashboardController::class, 'index']) // <-- UBAH INI
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 // Barang index (publik boleh lihat semua laporan barang)
 Route::get('/barang', [BarangController::class, 'index'])->name('barang.index');
@@ -33,11 +36,22 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/barang/{barang}', [BarangController::class, 'update'])->name('barang.update');
     Route::delete('/barang/{barang}', [BarangController::class, 'destroy'])->name('barang.destroy');
     Route::patch('/barang/{barang}/ubah-status', [BarangController::class, 'ubahStatus'])->name('barang.ubahStatus');
+    Route::patch('/barang/{barang}/tandai-selesai', [BarangController::class, 'tandaiSelesai'])->name('barang.tandaiSelesai'); // <-- INI JALAN BARUNYA!
 
+});
+
+// GRUP RUTE ADMIN
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    // Rute untuk dashboard admin
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+    // Rute baru untuk mengelola pengguna
+    Route::get('/user', [AdminUserController::class, 'index'])->name('user.index');
+    Route::patch('/user/{user}/toggle-admin', [AdminUserController::class, 'toggleAdmin'])->name('user.toggleAdmin');
+    Route::delete('/user/{user}', [AdminUserController::class, 'destroy'])->name('user.destroy');
 });
 
 // menampilkan deskrisi barang
 Route::get('/barang/{barang}', [BarangController::class, 'show'])->name('barang.show');
 
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
