@@ -46,7 +46,7 @@
                     @guest
                         <li class="nav-item">
                             <a class="btn btn-sm btn-navbar-login me-lg-2 mb-2 mb-lg-0"
-                                href="{{ route('login') }}">Masuk</a>
+                                href="{{ route('login') }}">Login</a>
                         </li>
                         <li class="nav-item">
                             <a class="btn btn-sm btn-navbar-register" href="{{ route('register') }}">Register</a>
@@ -60,15 +60,19 @@
                                 <span>{{ Auth::user()->name }}</span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="{{ route('profile.edit') }}"><i
-                                            class="bi bi-person-circle me-2"></i>Profil</a></li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('profile.edit') }}">
+                                        <i class="bi bi-person-circle me-2"></i>Profil
+                                    </a>
+                                </li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
                                 {{-- ... link profil ... --}}
                                 @if (Auth::user()->is_admin)
                                     <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}"><i
-                                                class="bi bi-shield-lock-fill me-2"></i>Admin Panel</a></li>
+                                                class="bi bi-shield-lock-fill me-2"></i>Admin Panel</a>
+                                    </li>
                                 @endif
                                 <li>
                                     <hr class="dropdown-divider">
